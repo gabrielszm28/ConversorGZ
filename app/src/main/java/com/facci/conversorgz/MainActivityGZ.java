@@ -63,9 +63,8 @@ public class MainActivityGZ extends AppCompatActivity {
         double valorCambio = Double.parseDouble(valorCambioET.getText().toString());
 
         double resultado = procesarConversion(monedaActual, monedaCambio, valorCambio);
-
-        if (resultado > 0) {
-            resultadoTV.setText(String.format("Por %5.2f, usted rebirá %5.2f $s", valorCambio, monedaActual, resultado, monedaCambio));
+        if (resultado>0){
+            resultadoTV.setText(String.format("Por %5.2f %s, usted recibira %5.2f %s",valorCambio,monedaActual,resultado,monedaCambio));
             valorCambioET.setText("");
 
             SharedPreferences preferencias = getSharedPreferences("MisPreferencias", Context.MODE_PRIVATE);
@@ -76,38 +75,41 @@ public class MainActivityGZ extends AppCompatActivity {
 
             editor.commit();
 
-        } else
-        {
-            resultadoTV.setText(String.format("Usted recibirá"));
-            Toast.makeText(MainActivityGZ.this, "Las opciones elegidas no tienen un factor de conversion",Toast.LENGTH_SHORT).show();
 
+
+        }else{
+            resultadoTV.setText(String.format("Usted recibirá"));
+            Toast.makeText(MainActivityGZ.this, "Las opciones elegidas no tienen un factor de conversión", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private double procesarConversion(String monedaActual,String monedaCambio,double valorCambio){
+    private double procesarConversion(String monedaActual, String monedaCambio, double valorCambio) {
         double resultadoConversion = 0;
+
         switch (monedaActual){
-            case "DÓLAR":
+            case"DÓLAR":
                 if (monedaCambio.equals("EURO"))
-                    resultadoConversion = valorCambio = factorDolarEuro;
+                    resultadoConversion = valorCambio * factorDolarEuro;
 
                 if (monedaCambio.equals("PESO MEXICANO"))
                     resultadoConversion = valorCambio / factorPesoDolar;
 
                 break;
             case "EURO":
-                if (monedaCambio.equals("DOLAR"))
+                if (monedaCambio.equals("DÓLAR"))
                     resultadoConversion = valorCambio / factorDolarEuro;
 
                 break;
             case "PESO MEXICANO":
-                if (monedaCambio.equals("DOLAR")) {
-                    resultadoConversion = valorCambio = factorPesoDolar;
-                }
+                if (monedaCambio.equals("DÓLAR"))
+                    resultadoConversion = valorCambio * factorPesoDolar;
+
                 break;
+
         }
-        return resultadoConversion ;
+        return resultadoConversion;
     }
 
-    }
+
+}
 
